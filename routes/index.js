@@ -4,10 +4,8 @@ const fs = require('fs')
 const path = require('path')
 const basename = path.basename(__filename)
 
-const middlewares = require('../middlewares/')
 
 module.exports = (options) => {
-  options.middlewares = middlewares
   fs
     .readdirSync(__dirname)
     .filter(file => {

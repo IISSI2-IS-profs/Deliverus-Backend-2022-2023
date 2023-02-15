@@ -17,9 +17,6 @@ app.use('/public', express.static(path.join(__dirname, '/public')))// Serves res
 const requireOptions = { app }
 require('./routes/')(requireOptions)
 
-const { initPassport } = require('./config/passport')
-initPassport()
-
 const { initSequelize } = require('./config/sequelize')
 const sequelize = initSequelize()
 
