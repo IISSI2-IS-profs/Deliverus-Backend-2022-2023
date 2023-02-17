@@ -104,6 +104,7 @@ In our project we will need the following attributes from the request:
  Response object _represents the HTTP response that an Express app sends when it gets an HTTP request_ (see https://expressjs.com/en/4x/api.html#res.
 In our project we will need the following methods from the `res` object:
 * `res.json(entityObject)` returns the object `entityObject` to the client as a json document with the HTTP 200 status code. For instance: `res.json(restaurant)` will return the restaurant object as json document.
+* `res.json(message)` returns a string `message` to the client as a json document with HTTP 200 status code.
 * `res.status(500).send(err)` returns the `err` object (typically including some kind of error message) and a HTTP 500 status code to the client.
 
 HTTP Code status used in this project are:
