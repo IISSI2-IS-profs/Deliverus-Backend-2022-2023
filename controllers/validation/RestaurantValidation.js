@@ -4,16 +4,8 @@ const maxFileSize = 2000000 // around 2Mb
 
 module.exports = {
   create: [
-    check('name').exists().isString().isLength({ min: 1, max: 255 }).trim(),
-    check('description').optional({ nullable: true, checkFalsy: true }).isString().trim(),
-    check('address').exists().isString().isLength({ min: 1, max: 255 }).trim(),
-    check('postalCode').exists().isString().isLength({ min: 1, max: 255 }),
-    check('url').optional({ nullable: true, checkFalsy: true }).isString().isURL().trim(),
-    check('shippingCosts').exists().isFloat({ min: 0 }).toFloat(),
-    check('email').optional({ nullable: true, checkFalsy: true }).isString().isEmail().trim(),
-    check('phone').optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 1, max: 255 }).trim(),
-    check('restaurantCategoryId').exists({ checkNull: true }).isInt({ min: 1 }).toInt(),
-    check('userId').not().exists(),
+    // TODO Check that the body includes valid values for its properties when creating a restaurant
+
     check('heroImage').custom((value, { req }) => {
       return checkFileIsImage(req, 'heroImage')
     }).withMessage('Please upload an image with format (jpeg, png).'),
@@ -28,16 +20,7 @@ module.exports = {
     }).withMessage('Maximum file size of ' + maxFileSize / 1000000 + 'MB'),
   ],
   update: [
-    check('name').exists().isString().isLength({ min: 1, max: 255 }).trim(),
-    check('description').optional({ nullable: true, checkFalsy: true }).isString().trim(),
-    check('address').exists().isString().isLength({ min: 1, max: 255 }).trim(),
-    check('postalCode').exists().isString().isLength({ min: 1, max: 255 }),
-    check('url').optional({ nullable: true, checkFalsy: true }).isString().isURL().trim(),
-    check('shippingCosts').exists().isFloat({ min: 0 }).toFloat(),
-    check('email').optional({ nullable: true, checkFalsy: true }).isString().isEmail().trim(),
-    check('phone').optional({ nullable: true, checkFalsy: true }).isString().isLength({ min: 1, max: 255 }).trim(),
-    check('restaurantCategoryId').exists({ checkNull: true }).isInt({ min: 1 }).toInt(),
-    check('userId').not().exists(),
+    // TODO Check that the body includes valid values for its properties when updating a restaurant
     check('heroImage').custom((value, { req }) => {
       return checkFileIsImage(req, 'heroImage')
     }).withMessage('Please upload an image with format (jpeg, png).'),

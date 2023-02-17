@@ -1,138 +1,28 @@
-# DeliverUS - Project Requirements
+# Introduction
+We will learn how to define and implement the validation middleware and others on our backend Node.js Apps. Middlewares are intented to run some specific parts of our business logic such as:
+* Validation of data from clients (the software that performs operations against the backend).
+* Checking authorization.
+* Checking permissions.
+* Checking ownership of resources.
 
-## Introduction
-DeliverUS is a made-up company whose business is focused on delivering food from 3rd parties (restaurants) to customers. To this end, we are requested to develop the needed software products which hopefully will boost the company. After interviewing the product owners and some stakeholders, the general objectives and requirements have been agreed, as described in this document.
+Secondly, we will learn how a Validation package will help us performing validation of data coming from clients.
 
-## General Objective: Manage customer orders to restaurants
-The software has to enable customers to order products to restaurants. To this end the following objectives have been identified
-
-* Objective 1: Restaurants management
-* Objective 2: Restaurants' products management
-* Objective 3: Restaurants' order management
-* Objective 4: Customers' order management
-* Objective 5: Users management
-
-## Information requirements
-### IR-1: Users
-DeliverUS expects two types of users: restaurant owners and customers. The following information should be stored: First name, last name, email, phone number, avatar image, address and postal code. For login and authentication purposes, a password, a token and a tokenExpiration date should also be stored.
-
-### IR-2: Restaurants
-Owners manage restaurants. The following information should be stored: name, description, address, postal code, url, email, phone number, logo, hero image (it will serve as restaurant background image), shipping costs (default for orders placed to this restaurant), average service time in minutes (which will be computed from the orders record), status. A restaurant status represent if it is accepting orders, currently unavailable, or temporarily/permanently closed.
-There are some predefined restaurant categories on the system, so the restaurant will belong to one restaurant category.
-
-### IR-3: Products
-Products are sold by restaurants. Each product belongs to one restaurant. The following information should be stored: name, description, price, image, order and availability. The order is intended for sorting purposes that could be defined by the owner so the products are ordered according to his/her interests.
-
-There are some predefined product categories on the system, so the product will belong to one product category.
-
-### IR-4: Orders
-Orders are placed by customers. Each order will include a set of products from one particular restaurant. Orders cannot include products from more than one restaurant. The following information should be stored: creation date (when the customer places the order), start date (when a restaurant accepts the order), sent date (when the order leaves the restaurant) and delivery date (when the customer receives the order), total price of the products included, the address where it has to be delivered, and the shipping costs. Thus, each order can be in one of the following states/statuses: 'pending', 'in process', 'sent', 'delivered'.
-
-The system has to store the quantity of each product included in the order and the unitary price of each product at the moment of order placement.
-
-## Class diagram proposed for design
-From the information requirements and objectives described, the following class diagram is proposed:
-
-![DeliverUS-EntityDiagram drawio (3)](https://user-images.githubusercontent.com/19324988/155700850-bb7817fb-8818-440b-97cb-4fbd33787f20.png)
-
-## Business rules
-* BR1: If an order total price is greater than 10€ the shipping costs will be 0€ (free shipping).
-* BR2: An order can only include products from one restaurant
-* BR3: Once an order is placed, it cannot be modified.
-
-## Functional requirements
-### Customer functional requirements:
-As a customer, the system has to provide the following functionalities:
-#### FR1: Restaurants listing
-Customers will be able to query all restaurants.
-#### FR2: Restaurants details and menu
-Customers will be able to query restaurants details and the products offered by them.
-#### FR3: Add, edit and remove products to a new order
-A customer can add several products, and several units of a product to a new order. Before confirming, customer can edit and remove products.
-#### FR4: Confirm or dismiss new order
-If an order is confirmed, it is created with the state _pending_. Shipping costs must follow BR1: _Orders greater than 10€ don't have service fee_. An order is automatically related to the customer who created it.
-If an order is dismissed, nothing is created.
-#### FR5: Listing my confirmed orders
-A Customer will be able to check his/her confirmed orders, sorted from the most recent to the oldest.
-#### FR6: Show order details
-A customer will be able to look his/her orders up. The system should provide all details of an order, including the ordered products and their prices.
-#### FR7: Show top 3 products
-Customers will be able to query top 3 products from all restaurants. Top products are the most popular ones, in other words the best sellers.
-#### FR8: Edit/delete order
-If the order is in the state 'pending', the customer can edit or remove the products included or remove the whole order. The delivery address can also be modified in the state 'pending'.
-
-If the order is in the state 'sent' or 'delivered' no edition is allowed.
+## Prerequisites
+* Keep in mind we are developing the backend software needed for DeliverUS project. Please, read project requirements found at: https://github.com/IISSI2-IS/DeliverUS-Backend/blob/main/README.md
+* Software requirements for the developing environment con be found at Lab0 videos:
+  * The template project includes EsLint configuration so it should auto-fix formatting problems as soon as a file is saved.
+  * The template project also includes the complete model of the App, which was completed in the previous lab.
 
 
-### Owner functional requirements:
-As a restaurant owner, the system has to provide the following functionalities:
-#### FR1: Add, list, edit and remove Restaurants
-Restaurants are related to an owner, so owners can perform these operations to the restaurants owned by him. If an owner creates a Restaurant, it will be automatically related (owned) to him. If a restaurant is removed, all its products must be removed as well.
-#### FR2: Add, list, edit and remove Products
-An owner can create, read, update and delete the products related to any of his owned Restaurants.
-#### FR3: List orders of a Restaurant.
-An owner will be able to inspect orders of any of the restaurants owned by him. The order should include products related.
-#### FR4: To change the state of an order
-An owner can change the state of an order. States can change from: _pending_ to _in process_, from _in process_ to _sent_, and finally from _sent_ to _delivered_.
-#### FR5: To Show a dashboard including some business analytics:
- #yesterdayOrders, #pendingOrders, #todaysServedOrders, #invoicedToday (€)
+# Exercices
 
-
-## Non-functional requirements
-### Portability
-The system has to provide users the possibility to be accessed and run through the most popular operating systems for mobile and desktop devices.
-
-### Security
-Backend should include basic measures to prevent general security holes to be exploited such as: sql injection, contentSecurityPolicy, crossOriginEmbedderPolicy, crossOriginOpenerPolicy, crossOriginResourcePolicy, dnsPrefetchControl, expectCt, frameguard, hidePoweredBy, helmet.hsts, ieNoOpen, noSniff, originAgentCluster, permittedCrossDomainPolicies, referrerPolicy, xssFilter.
-
-For login and authentication purposes, a password, a token and a tokenExpiration (token authentication strategy) date should also be stored for users.
-
-Note: This subject does not focus on security topics, but we will use libraries made by cybersecurity experts that will help us to include these measures. In Node.js ecosystem, Sequelize includes data sanitization and other measures to prevent SQL injection attacks and we will use the helmet package for the rest of potential security holes when publishing REST services.
-
-### Scalability
-The system should use a stack of technologies that could be deployed in more than one machine, horizontal scalability ready.
-
-## Proposed architecture
-Once that requirements have been analyzed by our company's software architects, the following general architecture is proposed:
-1. Client-server architecture model.
-2. Front-end and backend independent developments.
-3. One front-end development for each type of user (Customer and Owners).
-
-Moreover, these architects propose the following technological stack:
-1. Backend:
-   1. Relational database, Mariadb server. It may be deployed on a machine other than where the rest of subsystems are deployed.
-   2. DeliverUS backend application logic developed in Node.js application server that publishes functionalities as RESTful services helped by Express.js framework.
-2. Front-end:
-   1. React-native based clients for both front-ends, deployable as Android, iOS or web Apps.
-   1. DeliverUS-Owner App for the functionalities intended for restaurants' owners.
-   3. DeliverUS-Customer App for the functionalities intended for customers.
-
-
-
-# IISSI-2 Software Engineering grade group project:
-Students will group together to develop the course project. The size and complexity of the project to be developed is intended for groups from 3 to 4 students.
-
-During lab sessions, teachers will conduct and instruct students about the development of the backend and frontend of the DeliverUS App requirements related to owner functionalities. Specifically:
-* Lab 1, 2 and 3: Backend required developments to support owner frontend app and some common functionalities.
-* Lab 4, 5, 6, 7 and 8: Frontend app for owners.
-
-Students will be provided with:
-* A backend template that includes the implementation of labs 1, 2 and 3
-* A frontend implementation of the DeliverUS app for owners.
-* A frontend template for the DeliverUS app for customers.
-
-Students are required to:
-* Complete the backend template provided to include the required functionalities for customers.
-* Complete the frontend template provided to develop the customer frontend App.
-
-# Backend deployment steps:
-1. Accept the assignment of your github classroom if you have not done it before. Once you accepted it, you will have your own copy of this project template.
-2. Clone your private repository at your local development environment by opening VScode and clone it by opening Command Palette (Ctrl+Shift+P or F1) and `Git clone` this repository, or using the terminal and running
+## 1. Use repository as template, clone and setup
+Press on "Use this template" to create your own repository based on this template. Afterwards clone your own repository by opening VScode and clone the base lab repository by opening Command Palette (Ctrl+Shift+P or F1) and `Git clone` this repository, or using the terminal and running
 ```PowerShell
 git clone <url>
 ```
 
-It may be necessary to setup your github username by running the following commands on your terminal:
+It may be necessary to setup your git username by running the following commands on your terminal:
 ```PowerShell
 git config --global user.name "FIRST_NAME LAST_NAME"
 git config --global user.email "MY_NAME@example.com"
@@ -140,17 +30,127 @@ git config --global user.email "MY_NAME@example.com"
 
 In case you are asked if you trust the author, please select yes.
 
-3. Setup your environment file. As explained in labs, it is needed to create a copy of the `.env.example` file, name it `.env` and include your environment variables, specially your database username and password.
+As in previous labs, it is needed to create a copy of the `.env.example` file, name it `.env` and include your environment variables.
 
-4. Install dependencies. Run `npm install` to download and install packages to the current project folder.
+Run `npm install` to download and install packages to the current project folder.
 
-5. Check and run mariaDB server.
-* Windows:
-  * If installed as service run `services.msc` and start the mariadb service
-  * If installed as binary, locate your mariaDB binary and start.
-* MacOS:
+Check and run mariaDB server.
+* Macos:
 ```Powershell
 mysql.server start
 ```
-6. Run migrations and seeders. You can use the previously configured task by opening the command palette Command Palette (Ctrl+Shift+P or F1) `Tasks: run task` and select `Rebuild database`
-7. Run `npm start`
+* Windows:
+  * If installed as service run `services.msc` and start the mariadb service
+  * If installed as binary, locate your mariaDB binary and start.
+
+
+## 2. Remember project structure
+
+You will find the following elements. During this lab we will focus our attention on the `middleware` and `controllers\validation` folders:
+* **`middlewares` folder: various checks needed such as authorization, permissions and ownership.**
+* **`controllers\validation` folder: validation of data included in client requests. One validation file for each entity**
+* `routes` folder: where URIs are defined and referenced to middlewares and controllers
+* `controllers` folder: where business logic is implemented, including operations to the database
+* `package.json`: scripts for running the server and packages dependencies including express, sequelize and others. This file is usally created with `npm init`, but you can find it already in your cloned project.
+    * In order to add more package dependencies you have to run `npm install packageName --save` or `npm install packageName --save-dev` for dependencies needed only for development environment (p. e. nodemon). To learn more about npm please refer to [its documentation](https://docs.npmjs.com/cli/v7/commands/npm).
+* `package-lock.json`: install exactly the same dependencies in futures deployments. Notice that dependencies versions may change, so this file guarantees to download and deploy the exact same tree of dependencies.
+* `backend.js`: run http server, setup connections to Mariadb and it will initialize various components
+* `.env.example`: example environment variables.
+* `models` folder: where models entities are defined
+* `migrations` folder: where the database schema is defined
+* `seeders` folder: where database sample data is defined
+* `config` folder: where some global config files are stored (to run migrations and seeders from cli)
+* `example_api_client` folder: will store test requests to our Rest API
+* `.vscode` folder: VSCode config for this project
+
+
+## 3. Middlewares and validation middleware.
+You will find middlewares at `middlewares` folder. One for each entity, one for handling file upload, and another for authentication/authorization.
+
+At `AuthMiddleware.js` file you will find two methods:
+* `isLoggedIn` checks if the user is logged in (the request includes a valid bearer token).
+*  `hasRole` receives an array of roles names and check is the logged in user has the needed role.
+
+Next, you will find a middleware file for each entity. Depending on the entity and the functional requirements we will need to check if the current logged-in user has enough privileges to accomplish the requested operation.
+
+For instance, when a user sends a request for creating a new product we will need to check that:
+* the user is logged in
+* the user has the role owner (since customers cannot create products)
+* the product belongs to a restaurant the he/she owns (data includes a restaurantId which belongs to the owner that makes the request)
+* the product data include valid values for each property in order to be created according to our information requirements.
+
+Moreover, if the data may include files, you will find an `upload` middleware that will handle this.
+
+In order to check all these requirements, we have to include each middleware method in the corresponding route:
+```Javascript
+app.route('/products')
+    .post(
+      middlewares.isLoggedIn,
+      middlewares.hasRole('owner'),
+      upload,
+      middlewares.checkProductRestaurantOwnership,
+      ProductValidation.create(),
+      ProductController.create
+    )
+```
+
+### 3.1. Validation middlewares
+Validation middlewares are intended to check if the data that comes in a request fulfils the information requirements. Most of this requirements are defined at the database level, and were including when creating the schema on the migration files.
+Some other requirements, are checked at the application layer. For instance, if you want to create a new restaurant, some images can be provided: logo image and hero image. These files should be image files and its size should be less than 10mbs. In order to check these other requirements we will use the `express-validator` package.
+
+Notice that we will create a method for each endpoint that would require validation, usually a `create()` method for creating new data and a `update()` method for updating data.
+
+More info about **using** middlewares can be found at Express documentation: https://expressjs.com/en/guide/using-middleware.html
+
+More info about **writting** middlewares can be found at Express documentation: https://expressjs.com/en/guide/writing-middleware.html
+
+### 3.2. Defining middlewares and validation middlewares for Restaurant routes
+Open the file `routes/RestaurantRoutes.js`. You will find that routes are defined, but it is needed to define which middlewares will be called for each route. Notice that the route `PUT restaurants/:restaurantId` has been completed as an example.
+
+Include middlewares needed for Restaurant routes according to the requirements of Deliverus project. For each route you should determine if:
+* is it needed that a user is logged in?
+* is it needed that the user has a particular role?
+* is it needed that the restaurant belongs to the logged-in user (restaurant data should include a userId which belongs to the owner of that restaurant)
+* is it needed that the restaurant data include valid values for each property in order to be created according to our information requirements.
+
+### 3.3. Implement validation middleware for Restaurant create()
+Open the file `controllers/validation/RestaurantValidation.js`. You will find the methods for validating data when creating `create` and when updating `update`.
+Restaurant properties are defined at database level. You can check the corresponding migration. Some validations are done at the app level, for instance we will include validations for check that email data is a valid email.
+
+In order to add validations, follow this snippet:
+```Javascript
+create: () => {
+    return [
+        // array of checks
+        check('attributeName').validationMethod(),
+        check('otherAttributeName').validationMethod(),
+    ]
+
+```
+
+For a comprehensive list of validations methods, see https://github.com/validatorjs/validator.js#validators
+
+
+### 3.4. Check validation in controllers
+When validation fails, it is passed to the following method in the middleware chain. In this case, the next method should be the controller method.
+
+Within the controller method, we can check if any validation rule has been violated, and return the appropriate response. To this end, we can include the following at the beginning of the controller method:
+
+```Javascript
+const err = validationResult(req)
+
+  if (err.errors.length > 0) {
+    res.status(422).send(err)
+  } else {
+     // Controller business logic
+
+
+````
+
+Inspect `RestaurantController.js`, and see how validation is handled.
+
+
+## 4. Test Restaurant routes, controllers and middlewares
+Open ThunderClient extension ('https://www.thunderclient.io/'), and reload the collections if not already loaded by clicking on Collections → _**≡**_ menu→ reload. These collections are stored at `example_api_client/thunder-tests`.
+
+Click on Collections folder and you will find a set of requests with tests for all endpoints. Run all the collection, you will find at the right side if a test is successful or not. Some requests perform more than one test.

@@ -30,49 +30,30 @@ module.exports = (options) => {
     .get(
       RestaurantController.index)
     .post(
-      middlewares.isLoggedIn,
-      middlewares.hasRole('owner'),
-      upload,
-      RestaurantValidation.create,
-      middlewares.handleValidation,
+      // TODO: Add needed middlewares
       RestaurantController.create)
 
   app.route('/restaurants/:restaurantId')
     .get(RestaurantController.show)
     .put(
-      middlewares.isLoggedIn,
-      middlewares.hasRole('owner'),
-      middlewares.checkEntityExists(Restaurant, 'restaurantId'),
-      middlewares.checkRestaurantOwnership,
-      upload,
-      RestaurantValidation.update,
-      middlewares.handleValidation,
+      // TODO: Add needed middlewares
       RestaurantController.update)
     .delete(
-      middlewares.isLoggedIn,
-      middlewares.hasRole('owner'),
-      middlewares.checkEntityExists(Restaurant, 'restaurantId'),
-      middlewares.checkRestaurantOwnership,
+      // TODO: Add needed middlewares
       RestaurantController.destroy)
 
   app.route('/restaurants/:restaurantId/orders')
     .get(
-      middlewares.isLoggedIn,
-      middlewares.hasRole('owner'),
-      middlewares.checkEntityExists(Restaurant, 'restaurantId'),
-      middlewares.checkRestaurantOwnership,
+      // TODO: Add needed middlewares
       OrderController.indexRestaurant)
 
   app.route('/restaurants/:restaurantId/products')
     .get(
-      middlewares.checkEntityExists(Restaurant, 'restaurantId'),
+      // TODO: Add needed middlewares
       ProductController.indexRestaurant)
 
   app.route('/restaurants/:restaurantId/analytics')
     .get(
-      middlewares.isLoggedIn,
-      middlewares.hasRole('owner'),
-      middlewares.checkEntityExists(Restaurant, 'restaurantId'),
-      middlewares.checkRestaurantOwnership,
+      // TODO: Add needed middlewares
       OrderController.analytics)
 }
