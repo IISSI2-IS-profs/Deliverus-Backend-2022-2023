@@ -54,7 +54,7 @@ You will find the following elements (some of them will appear in following labs
 
 
 ## 3. Routes
-Backend software can publish its functionalities through RESTFul services. These services follows the architectural patterns of the HTTP protocol. DeliverUS functionalities are explained at https://github.com/IISSI2-IS/DeliverUS-Backend/blob/main/README.md#functional-requirements
+Backend software can publish its functionalities through RESTFul services. These services follows the architectural patterns of the HTTP protocol. DeliverUS functionalities are explained at https://github.com/IISSI2-IS-2022-2023/DeliverUS-Backend-2022-2023/blob/main/README.md#functional-requirements
 
 As an example, if the system provides CRUD operations over an entity, there should be an endpoint for each operation. HTTP POST endpoint to Create, HTTP GET to Read, HTTP PUT|PATCH to Update and HTTP DELETE to Delete.
 
