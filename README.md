@@ -90,16 +90,6 @@ Complete the file `RestaurantRoutes.js` in order to define the endpoints for the
   * FR5: To Show a dashboard including some business analytics: #yesterdayOrders, #pendingOrders, #todaysServedOrders, #invoicedToday (€). Notice that the controller function that attends this request is `OrderController.analytics`)
 
 
-
-### 3.2. Updating our Express app.
-Notice that `backend.js` now includes a way of register routes by importing all routes definition files in the `routes` folder by the following sentences:
-```Javascript
-// require only admits one parameter, so we need to create an object composed of both parameters needed on routes
-const requireOptions = { app: app }
-require('./routes/')(requireOptions)
-```
-When the require method receives a folder path (instead of a file) it looks for an `index.js` file. If present, this file usually requires (imports) all the files of the folder. In this case, this means all the routes files of the folder.
-
 ## 4. Controllers.
 Controllers are the main components of the business logic layer. Functionalities and business rules may be implemented on controllers specially according to the MVC architectural pattern. DeliverUS project organizes its controllers in the `controllers` folder. We define controllers for the business logic related to each entity in its own file. For instance, restaurant controller will be defined in the `RestaurantController.js` file.
 
