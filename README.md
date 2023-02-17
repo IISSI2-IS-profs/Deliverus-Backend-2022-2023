@@ -95,7 +95,7 @@ Controllers are the main components of the business logic layer. Functionalities
 
 Each controller method receives a request `req` and a response `res` object. Request object _represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers, and so on_ (see https://expressjs.com/en/4x/api.html#req for more details).
 In our project we will need the following attributes from the request:
-* `req.body` represents the data that comes from the client (usually a Json document or the a form sent as multipart/form-data when files are needed).
+* `req.body` represents the data that comes from the client (usually a JSON document or the a form sent as multipart/form-data when files are needed).
 * `req.params` represents path params. For instance if we defined a `:restaurantId` param, we will have access to it by `req.params.restaurantId`.
 * `req.file` or `req.files` represents files appended to a multipart/form-data request. For instance, `req.files.logo` would give access to a file param named `logo`.
 * `req.query` represents query params. For instance, if a request includes a `status` query param, it will be accessed by `req.query.status`.
@@ -118,9 +118,9 @@ For more information about HTTP Status code see: https://developer.mozilla.org/e
 
 ### 4.1. Restaurant controller methods.
 #### 4.1.1 Create method to Create entity
-Typically, we expect that the body of the req includes a json document with all the needed information to create a new element of the entity. To access this document we use the `req.body` attribute.
+Typically, we expect that the body of the req includes a JSON document with all the needed information to create a new element of the entity. To access this document we use the `req.body` attribute.
 
-Sequelize offers a way of creating new elements, the `Model.build` method that receives a json object that includes the needed fields for buliding a new element and then a `Model.save` method to store it in the corresponding database table.
+Sequelize offers a way of creating new elements, the `Model.build` method that receives a JSON object that includes the needed fields for buliding a new element and then a `Model.save` method to store it in the corresponding database table.
 
 For the RestaurantController we can do this by using the following snippets:
 ```Javascript
