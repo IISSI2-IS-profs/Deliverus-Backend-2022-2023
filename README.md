@@ -11,19 +11,21 @@ Secondly, we will learn how an ORM software tool (the _Sequelize_ package) will 
 
 # Exercices
 
-## 1. Use repository as template and clone
-Press on "Use this template" to create your own repository based on this template. Afterwards clone your own repository by opening VScode and clone the base lab repository by opening Command Palette (Ctrl+Shift+P or F1) and `Git clone` this repository, or using the terminal and running
+## 1. Accept GitHub Classroom assignment and clone
+Accept the GitHub Classroom assignment to create your own repository based on this template (most likely you have already done it if you are reading these instructions.). Afterwards, clone your own repository by opening VScode and clone the base lab repository by opening Command Palette (Ctrl+Shift+P or F1) and `Git clone` this repository, or using the terminal and running
 ```PowerShell
 git clone <url>
 ```
 
-It may be necessary to setup your git username by running the following commands on your terminal:
+Alternatively, you can use the *Source Control* button in the left-sided bar and click on *Clone Repository* button. 
+
+In case you are asked if you trust the author, please select yes.
+
+It may be necessary to setup your git username by running the following commands on your terminal, in order to be able to commit and push:
 ```PowerShell
 git config --global user.name "FIRST_NAME LAST_NAME"
 git config --global user.email "MY_NAME@example.com"
 ```
-
-In case you are asked if you trust the author, please select yes.
 
 As in previous labs, it is needed to create a copy of the `.env.example` file, name it `.env` and include your environment variables.
 
@@ -40,10 +42,12 @@ You will find the following elements (some of them will appear in following labs
 * `backend.js`: run http server, setup connections to Mariadb and it will initialize various components
 * `.env.example`: example environment variables.
 * `models` folder: where models entities are defined
-* `migrations` folder: where the database schema is defined
-* `seeders` folder: where database sample data is defined
+* `database` folder: where all the logic for creating and populating the database is located
+    * `database/migrations` folder: where the database schema is defined
+    * `database/seeders` folder: where database sample data is defined
 * `middlewares` folder: various checks needed such as authorization, permissions and ownership.
-* `controllers\validation` folder: validation of data included in client requests. One validation file for each entity
+* `controllers` folder: where business logic is implemented, including operations to the database
+    * `controllers/validation` folder: validation of data included in client requests. One validation file for each entity
 * `config` folder: where some global config files are stored (to run migrations and seeders from cli)
 * `example_api_client` folder: will store test requests to our Rest API
 * `.vscode` folder: VSCode config for this project
