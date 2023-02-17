@@ -3,8 +3,8 @@ We will learn how to define and implement the Endpoints of our backend and how e
 
 Secondly, we will learn how an ORM software tool (the _Sequelize_ package) will help us performing operations on the Maria Database from these controllers.
 ## Prerequisites
-* Keep in mind we are developing the backend software needed for DeliverUS project. Please, read project requirements found at: https://github.com/IISSI2-IS/DeliverUS-Backend/blob/main/README.md
-* Software requirements for the developing environment con be found at: https://github.com/IISSI2-IS/DeliverUS-Backend#readme
+* Keep in mind we are developing the backend software needed for DeliverUS project. Please, read project requirements found at: https://github.com/IISSI2-IS-2022-2023/DeliverUS-Backend-2022-2023/blob/main/README.md
+* Software requirements for the developing environment con be found at: https://github.com/IISSI2-IS-2022-2023/DeliverUS-Backend-2022-2023#readme
   * The template project includes EsLint configuration so it should auto-fix formatting problems as soon as a file is saved.
   * The template project also includes the complete model of the App, which was completed in the previous lab.
 
