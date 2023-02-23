@@ -46,8 +46,7 @@ You will find the following elements (some of them will appear in following labs
     * `database/migrations` folder: where the database schema is defined
     * `database/seeders` folder: where database sample data is defined
 * `middlewares` folder: various checks needed such as authorization, permissions and ownership.
-* `controllers` folder: where business logic is implemented, including operations to the database
-    * `controllers/validation` folder: validation of data included in client requests. One validation file for each entity
+* `controllers/validation` folder: validation of data included in client requests. One validation file for each entity
 * `config` folder: where some global config files are stored (to run migrations and seeders from cli)
 * `example_api_client` folder: will store test requests to our Rest API
 * `.vscode` folder: VSCode config for this project
