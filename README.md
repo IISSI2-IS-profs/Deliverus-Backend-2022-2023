@@ -134,25 +134,20 @@ Then, we have to include the logged in owner as the restaurant userId. Notice th
 Next, we have to check if files are present. When we create a restaurant, we may include a heroImage and a logoImage. To this end we will check if each file is present, and if so, we store the path of the file in the corresponding database table field.
 ```Javascript
 if (typeof req.files?.heroImage !== 'undefined') {
-  newRestaurant.heroImage = req.files.heroImage[0].path
+  newRestaurant.heroImage = req.files.heroImage[0].destination + '/' + req.files.heroImage[0].filename
 }
 if (typeof req.files?.logo !== 'undefined') {
-  newRestaurant.logo = req.files.logo[0].path
+  newRestaurant.logo = req.files.logo[0].destination + '/' + req.files.logo[0].filename
 }
 ```
 
 Finally, we can save the new created restaurant. Our `newRestaurant` variable is built, but not saved. To this end, sequelize offers a `save` method for each model. As this is an I/O operation, we don't want to block the system, so the save method returns a promise. We will use the await/async syntax to make our code more readable. We can use the following snippet:
 ```Javascript
 try {
-      const restaurant = await newRestaurant.save()
-      res.json(restaurant)
-    }
-catch (err) {
-    if (err.name.includes('ValidationError')) { //The database may return some kind of error.
-        res.status(422).send(err)
-    } else {
-        res.status(500).send(err)
-    }
+  const restaurant = await newRestaurant.save()
+  res.json(restaurant)
+} catch (err) {
+    res.status(500).send(err)
 }
 ```
 
@@ -164,29 +159,32 @@ Implement the FR3: List orders of a Restaurant. An owner will be able to inspect
 #### 4.1.3 Show methods to return entity details.
 Implement the FR2: Restaurants details and menu: Customers will be able to query restaurants details and the products offered by them.
 To this end, you will receive a `req.params.restaurantId` identifying the restaurant. You can use the Sequelize `Model.findByPk` method.
-Notice that you will need to include its products. Follow this syntax:
+Notice that you will need to include its products and its restaurant category. Remember that products should be sorted according to the order field value. You can use the following code snippet to perform the query:
 ```Javascript
-const restaurant = await Restaurant.findByPk(req.params.restaurantId,
-      {
-        include: [
-          {
-            model: Product,
-            as: 'products'
-          }
-       ]
-      })
+const restaurant = await Restaurant.findByPk(req.params.restaurantId, {
+  attributes: { exclude: ['userId'] },
+  include: [{
+    model: Product,
+    as: 'products',
+    include: { model: ProductCategory, as: 'productCategory' }
+  },
+  {
+    model: RestaurantCategory,
+    as: 'restaurantCategory'
+  }],
+  order: [[{model:Product, as: 'products'}, 'order', 'ASC']],
+}
+)
 ```
 
-Next, return the restaurant by using `res.json()` method. Surround this code with the corresponding try and catch (you may not find a restaurant with the received id). In this case return a HTTP 404 status code.
+Next, return the restaurant by using `res.json()` method that receives the object to be returned. Surround this code with the corresponding try and catch In case that an exception is raised, you should return the HTTP status code 500 in the catch block by using the methods `res.status(httpCode).send(error)`.
 
 #### 4.1.4 Update method to modify entity.
-As done for the creation, check if files are present. Then use the `Model.update` method. This method returns the number of rows modified. In case of success, you should return the updated restaurant element by querying the database (`findByPk`) after the success update.
-This function follows the same steps that when creating a restaurant.
-
+As done for the creation, check if files are present. Then use the `Model.update` method. In case of success, you should return the updated restaurant element by querying the database (using the method `findByPk`) after the update.
+This method follows the same steps that when creating a restaurant.
 
 #### 4.1.5 Destroy method to remove entity.
-Use the `Model.destroy` method. You need to specify a where clause to remove only the `req.params.restaurantId` restaurant. Destroy returns the number of destroyed elements. Return an info message.
-
+Use the `Model.destroy` method. You need to specify a where clause to remove only the restaurant identified by `req.params.restaurantId` . Destroy returns the number of destroyed elements. Return an info message.
 
 ## 5. Test Restaurant routes and controllers
 Open ThunderClient extension (https://www.thunderclient.io/), and reload the collections by clicking on Collections → _**≡**_ menu→ reload. Collections are stored at
