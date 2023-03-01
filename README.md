@@ -107,26 +107,28 @@ app.route('/products')
 ```
 
 ### 3.1. Validation middlewares
-Validation middlewares are intended to check if the data that comes in a request fulfills the information requirements. Most of this requirements are defined at the database level, and were including when creating the schema on the migration files. Some other requirements, are checked at the application layer. For instance, if you want to create a new restaurant, some images can be provided: logo image and hero image. These files should be image files and its size should be less than 10mbs. In order to check these other requirements we will use the `express-validator` package. **In our case, we will make a complete validation using `express-validator` regardless if such validation is partially included in the database or not.**
+Validation middlewares are intended to check if the data that comes in a request fulfills the information requirements. Most of this requirements are defined at the database level, and were included when creating the schema on the migration files. Some other requirements, are checked at the application layer. For instance, if you want to create a new restaurant, some images can be provided: logo image and hero image. These files should be image files and its size should be less than 10mbs. In order to check these other requirements we will use the `express-validator` package. **It is a good practices to make a complete validation using `express-validator` regardless if such validation is partially included in the database or not.**
 
-Notice that we will create a method for each endpoint that would require validation, usually a `create()` method for creating new data and a `update()` method for updating data.
+Notice that we will create an array of rules for each endpoint that would require validation, usually a `create` array of rules for creating new data and an `update` array of rules for updating data.
 
 More info about **using** middlewares can be found at Express documentation: https://expressjs.com/en/guide/using-middleware.html
 
 More info about **writing** middlewares can be found at Express documentation: https://expressjs.com/en/guide/writing-middleware.html
 
 ### 3.2. Defining middlewares and validation middlewares for Restaurant routes
-Open the file `routes/RestaurantRoutes.js`. You will find that routes are defined, but it is needed to define which middlewares will be called for each route. <!--Notice that the route `PUT restaurants/:restaurantId` has been completed as an example.-->
+Open the file `routes/RestaurantRoutes.js`. You will find that routes are defined, but it is needed to define which middlewares will be called for each route.
 
 Include middlewares needed for Restaurant routes according to the requirements of Deliverus project. For each route you should determine if:
 * is it needed that a user is logged in?
 * is it needed that the user has a particular role?
-* is it needed that the restaurant belongs to the logged-in user (restaurant data should include a userId which belongs to the owner of that restaurant)
-* is it needed that the restaurant data include valid values for each property in order to be created according to our information requirements.
+* is it needed that the restaurant belongs to the logged-in user? (restaurant data should include a userId which belongs to the owner of that restaurant)
+* is it needed that the restaurant data include valid values for each property in order to be created according to our information requirements?
 
 ### 3.3. Implement validation middleware for Restaurant create()
-Open the file `controllers/validation/RestaurantValidation.js`. You will find the methods for validating data when creating `create` and when updating `update`.
-Restaurant properties are defined at database level. You can check the corresponding migration. Some validations are done at the app level, for instance we will include validations for check that email data is a valid email.
+Open the file `controllers/validation/RestaurantValidation.js`. You will find the arrays of rules for validating data when creating `create` and when updating `update`.
+Restaurant properties are defined at database level. You can check the corresponding migration. Some validations are done at the app level, for instance we will include validations to check that email data is a valid email.
+
+Moreover, it is common to apply some sanitizing over data. For instance, to remove blank spaces at the beginning and at the end of string values we can use the `trim()` method. 
 
 In order to add validations, follow this snippet:
 ```Javascript
@@ -159,29 +161,24 @@ create: [
 
 ```
 
-For a comprehensive list of validations methods, see https://github.com/validatorjs/validator.js#validators
+For a comprehensive list of validations methods, see https://github.com/validatorjs/validator.js#validators, and for a comprehensive list of sanitizing methods, see https://github.com/validatorjs/validator.js#sanitizers
 
 
 ### 3.4. Check validation in controllers
-When validation fails, it is passed to the following method in the middleware chain. In this case, the next method should be the validation handler method which will be always executed before the controller method.
+When validation fails, it is passed to the following middleware method in the middleware chain. In this case, the next method should be the validation handler method which will be always executed after the validation middleware.
 
-Within the ''handleValidation'' method, we can check if any validation rule has been violated, and return the appropriate response. To this end, the ''handleValidation'' method includes the following:
+Within the `handleValidation` method, we can check if any validation rule has been violated, and return the appropriate response. To this end, the `handleValidation` method includes the following code:
 
 ```Javascript
-const err = validationResult(req)
-    if (err.errors.length > 0) {
-      res.status(422).send(err)
-    } else {
-      next()
-    }
-
-
+const handleValidation = async (req, res, next) => {
+  const err = validationResult(req)
+  if (err.errors.length > 0) {
+    res.status(422).send(err)
+  } else {
+    next()
+  }
+}
 ```
-<!-- 
-Inspect `RestaurantController.js`, and see how validation is handled. -->
-
-
-
 
 ## 4. Test Restaurant routes, controllers and middlewares
 Open ThunderClient extension ('https://www.thunderclient.io/'), and reload the collections if not already loaded by clicking on Collections → _**≡**_ menu→ reload. These collections are stored at `example_api_client/thunder-tests`.
