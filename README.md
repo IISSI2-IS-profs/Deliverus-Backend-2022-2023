@@ -77,7 +77,7 @@ At `AuthMiddleware.js` file you will find two methods:
 *  `hasRole` receives an array of roles names and check if the logged-in user has the needed role.
 
 At `EntityMiddleware.js` file you will find a method:
-* `checkEntityExists` checks, for a given id and entity, if  there exists a record in the corresponding table in the database that matches such id.
+* `checkEntityExists` checks, for a given id and entity, if there exists a record in the corresponding table in the database that matches such id, and in case that the record does not exist, it returns the 404 HTTP status code.
 
 At `ValidationHandlingMiddleware.js` file you will find a method:
 * `handleValidation` checks the result from express-validator and if an error is found, returns 422 (Validation error) and stops the validation procedure.
@@ -107,7 +107,7 @@ app.route('/products')
 ```
 
 ### 3.1. Validation middlewares
-Validation middlewares are intended to check if the data that comes in a request fulfills the information requirements. Most of this requirements are defined at the database level, and were included when creating the schema on the migration files. Some other requirements, are checked at the application layer. For instance, if you want to create a new restaurant, some images can be provided: logo image and hero image. These files should be image files and its size should be less than 10mbs. In order to check these other requirements we will use the `express-validator` package. **It is a good practices to make a complete validation using `express-validator` regardless if such validation is partially included in the database or not.**
+Validation middlewares are intended to check if the data that comes in a request fulfills the information requirements. Most of this requirements are defined at the database level, and were included when creating the schema on the migration files. Some other requirements, are checked at the application layer. For instance, if you want to create a new restaurant, some images can be provided: logo image and hero image. These files should be image files and its size should be less than 10mbs. In order to check these other requirements we will use the `express-validator` package. **It is a good practice to make a complete validation using `express-validator` regardless if such validation is partially included in the database or not.**
 
 Notice that we will create an array of rules for each endpoint that would require validation, usually a `create` array of rules for creating new data and an `update` array of rules for updating data.
 
