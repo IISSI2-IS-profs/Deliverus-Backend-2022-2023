@@ -184,3 +184,27 @@ const handleValidation = async (req, res, next) => {
 Open ThunderClient extension ('https://www.thunderclient.io/'), and reload the collections if not already loaded by clicking on Collections → _**≡**_ menu→ reload. These collections are stored at `example_api_client/thunder-tests`.
 
 Click on Collections folder and you will find a set of requests with tests for all endpoints. Run all the collection, you will find at the right side if a test is successful or not. Some requests perform more than one test.
+
+## A. Annex about transactions
+Some database operations should be enclosed in a database transaction. This is useful when it is needed to ensure that several operations are successfully executed in the database, and in case that any of them raise an exception, undo all the previous operations. For instance, to create an `Order` it is needed to insert a record in the `Orders` table and to insert several records in the `OrderProducts` table. This must be done in a transaction.
+
+To create a transaction by using Sequelize, you can follow this sample code snippet:
+
+```Javascript
+const models = require('../models')
+const EntityName = models.EntityName
+
+const someFunctionThatNeedsTransaction = async (req, res) => {
+  let newEntity = EntityName.build(req.body)
+  const transaction = await models.sequelize.transaction() //creates a transaction
+  try {
+    newEntity = await newEntity.save({transaction}) //use the transaction in every operation
+    await newEntity.addRelatedEntity(relatedEntityId, { through: { associatedAttribute1: value1, associatedAttributeN: valueN }, transaction }) //adding associated element through an association table
+    await transaction.commit() //confirm all operations
+    res.json(newEntity)
+  } catch (err) {
+    await transaction.rollback() //in case of error, rollback all the operations executed in the context of the transaction
+    res.status(500).send(err)
+  }
+}
+```
